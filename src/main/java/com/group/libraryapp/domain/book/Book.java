@@ -1,38 +1,28 @@
 package com.group.libraryapp.domain.book;
 
-import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 public class Book {
 
-    public Book() {
-
+    protected Book() {
     }
 
-    public Book(String name, Boolean isNowRented) {
+    public Book(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException(String.format("잘못된 name(%s)입력", name));
+        }
         this.name = name;
-        this.isNowRented = isNowRented;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 255)
     private String name;
 
-    @CreationTimestamp
-    private LocalDateTime bookRentalStartDt;
-
-    @CreationTimestamp
-    private LocalDateTime bookRentalEndDt;
-
-    @Column(nullable = false)
-    private Boolean isNowRented;
 }

@@ -1,7 +1,13 @@
 package com.group.libraryapp.domain.user;
 
-import javax.persistence.*;
+import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory;
+import lombok.Getter;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 @Entity
 public class User {
 
@@ -14,6 +20,9 @@ public class User {
 
     private Integer age;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) //cascade 옵션
+    private List<UserLoanHistory> userLoanHistoryList = new ArrayList<>();
+
     protected User() {
 
     }
@@ -24,18 +33,6 @@ public class User {
         }
         this.name = name;
         this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void updateName(String name) {
