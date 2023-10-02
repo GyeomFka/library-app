@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @Entity
@@ -37,5 +38,17 @@ public class User {
 
     public void updateName(String name) {
         this.name = name;
+    }
+
+    public void loanBook(String bookName) {
+        this.userLoanHistoryList.add(new UserLoanHistory(this, bookName));
+    }
+
+    public void returnBook(String bookName) {
+        UserLoanHistory targetHistory = this.userLoanHistoryList.stream()
+                .filter(history -> history.getBookName().equals(bookName))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+        targetHistory.doReturn();
     }
 }
